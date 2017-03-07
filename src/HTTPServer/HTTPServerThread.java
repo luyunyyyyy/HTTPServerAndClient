@@ -1,5 +1,7 @@
 package HTTPServer;
 
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -8,30 +10,25 @@ import java.net.Socket;
  */
 public class HTTPServerThread extends Thread{
     private Socket clientSocket;
-    private BufferedReader bufferedReader;
-    private BufferedWriter bufferedWriter;
+    private static Logger logger = Logger.getLogger(HTTPServerThread.class);
 
-    private String
-
-
-    public HTTPServerThread(Socket clientSocket) {
+    private HTTPReader httpReader;
+    private HTTPWriter httpWriter;
+    HTTPServerThread(Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;
+        httpReader = new HTTPReader(clientSocket.getInputStream());
+        httpWriter = new HTTPWriter(clientSocket.getOutputStream());
 
     }
 
 
     @Override
     public void run() {
-        try {
-            bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
-            String firstLineOfRequest;
-            firstLineOfRequest = bufferedReader.readLine();
-
-            String url = firstLineOfRequest.split(" ")[1];
-        } catch (IOException e) {
-            e.printStackTrace();
+        String type = httpReader.getRequestType();
+        if(type.toUpperCase().equals("GET")){
+            logg
         }
+
     }
 }
